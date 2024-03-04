@@ -1,0 +1,348 @@
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css"
+  integrity="sha384-4LISF5TTJX/fLmGSxO53rV4miRxdg84mZsxmO8Rx5jGtp/LbrixFETvWa5a6sESd"
+  crossorigin="anonymous"
+/>
+<!-- jQuery UI CSS -->
+<link
+  rel="stylesheet"
+  href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"
+/>
+<div class="input-flotante">
+  <div class="mensaje">
+    <span>Haz una reserva</span>
+  </div>
+  <form class="form">
+    <div class="input">
+      <label for="hotel"><i class="bi bi-building"></i></label>
+      <select name="hotel">
+        <option>Seleccione un hotel</option>
+        <option>SUNSET ROYAL BEACH RESORT</option>
+        <option>SUNSET MARINA RESORT</option>
+        <option>OCEAN SPA HOTEL CANCUN</option>
+        <option>LAGUNA SUITES</option>
+      </select>
+    </div>
+    <div class="input">
+      <label for="calendarioEntrada"><i class="bi bi-calendar"></i></label>
+      <!-- Modificado para usar jQuery UI Datepicker -->
+      <input
+        id="calendarioEntrada"
+        name="calendarioEntrada"
+        type="text"
+        placeholder="Fecha de entrada"
+      />
+    </div>
+    <div class="input">
+      <label for="calendarioSalida"><i class="bi bi-calendar"></i></label>
+      <!-- Modificado para usar jQuery UI Datepicker -->
+      <input
+        id="calendarioSalida"
+        name="calendarioSalida"
+        type="text"
+        placeholder="Fecha de salida"
+      />
+    </div>
+    <div class="input">
+      <label
+        for="adultos"
+        style="
+          display: flex;
+          flex-direction: row;
+          gap: 5px;
+          padding-right: 4px;
+          padding-left: 4px;
+          align-items: center;
+        "
+        >Adultos<i class="bi bi-person"></i
+      ></label>
+      <!-- Modificado para usar jQuery UI Datepicker -->
+      <select id="adultos" name="ninios" style="border: 1px solid #c4c4c4">
+        <option>01</option>
+        <option>02</option>
+        <option>03</option>
+        <option>04</option>
+        <option>05</option>
+      </select>
+    </div>
+
+    <div class="input">
+      <label
+        for="ninios"
+        style="
+          display: flex;
+          flex-direction: row;
+          gap: 5px;
+          padding-right: 4px;
+          padding-left: 4px;
+          align-items: center;
+        "
+        >Niños<i class="bi bi-person"></i
+      ></label>
+      <!-- Modificado para usar jQuery UI Datepicker -->
+      <select id="ninios" name="ninios" style="border: 1px solid #c4c4c4">
+        <option>01</option>
+        <option>02</option>
+        <option>03</option>
+        <option>04</option>
+        <option>05</option>
+      </select>
+    </div>
+    <div class="button">
+      <button id="sendInfo" type="button">Enviar</button>
+    </div>
+  </form>
+</div>
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- jQuery UI -->
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script>
+  $(function () {
+    // Activación del Datepicker para el input de calendario de entrada
+    $("#calendarioEntrada").datepicker({
+      dateFormat: "yy-mm-dd", // Formato de fecha
+    });
+    // Activación del Datepicker para el input de calendario de salida
+    $("#calendarioSalida").datepicker({
+      dateFormat: "yy-mm-dd", // Formato de fecha
+    });
+  });
+</script>
+
+<script>
+  $(document).ready(function () {
+    // Detecta el evento de desplazamiento en la ventana
+    $(window).scroll(function () {
+      // Verifica si la posición de desplazamiento vertical es mayor que un valor específico, por ejemplo, 100
+      if ($(this).scrollTop() > 100) {
+        // Si el usuario se ha desplazado hacia abajo, cambia el bottom a 0
+        $(".input-flotante").css("bottom", "0px");
+        //width: 100vw;
+        $(".input-flotante").css("width", "100vw");
+      } else {
+        // Si el usuario está en la parte superior de la página, vuelve a establecer el bottom original
+        $(".input-flotante").css("bottom", "135px");
+        //width: 95vw;
+        $(".input-flotante").css("width", "95vw");
+      }
+    });
+  });
+</script>
+
+<script>
+  $(document).ready(function () {
+    // Activación del Datepicker para el input de calendario de entrada y salida
+    $("#calendarioEntrada, #calendarioSalida").datepicker({
+      dateFormat: "yy-mm-dd", // Formato de fecha
+    });
+
+    // Manejo del evento click para el botón con ID sendInfo
+    $("#sendInfo").click(function (event) {
+      // Previene el comportamiento por defecto, si es necesario
+      event.preventDefault();
+
+      // Construye la URL objetivo basándote en los valores del formulario
+      var url = "https://book.omnibees.com/hotelresults?c=2761&q=5354";
+      url +=
+        "&hotel_folder=" + encodeURIComponent($("select[name='hotel']").val());
+      url += "&CheckIn=" + encodeURIComponent($("#calendarioEntrada").val());
+      url += "&CheckOut=" + encodeURIComponent($("#calendarioSalida").val());
+      url += "&ad=" + encodeURIComponent($("#adultos").val());
+      url += "&ch=" + encodeURIComponent($("#ninios").val());
+
+      // Abre la nueva ventana con la URL construida
+      window.open(url, "_blank");
+    });
+  });
+</script>
+
+<script>
+  $(document).ready(function () {
+    // Función para actualizar las opciones del select según la URL
+    function actualizarOpcionesSelect() {
+      var url = window.location.href; // Obtiene la URL actual
+
+      // Define las opciones para diferentes palabras clave en la URL
+      var opcionesPorPalabraClave = {
+        "sunset-royal-beach-resort": [
+          {
+            valor: "SUNSET_ROYAL_BEACH_RESORT",
+            texto: "Sunset Royal Beach Resort",
+          },
+          { valor: "OCEAN_SPA_HOTEL_CANCUN", texto: "Ocean Spa Hotel Cancun" },
+        ],
+        marina: [
+          { valor: "SUNSET_MARINA_RESORT", texto: "Sunset Marina Resort" },
+          { valor: "LAGUNA_SUITES", texto: "Laguna Suites" },
+        ],
+      };
+
+      // Determina las opciones a usar basándose en la URL
+      var opcionesActuales = [];
+      if (url.includes("sunset-royal-beach-resort")) {
+        opcionesActuales = opcionesPorPalabraClave["sunset-royal-beach-resort"];
+      } else if (url.includes("marina")) {
+        opcionesActuales = opcionesPorPalabraClave["marina"];
+      } else {
+        opcionesActuales = [
+          {
+            valor: "SUNSET_ROYAL_BEACH_RESORT",
+            texto: "Sunset Royal Beach Resort",
+          },
+          { valor: "SUNSET_MARINA_RESORT", texto: "Sunset Marina Resort" },
+          { valor: "OCEAN_SPA_HOTEL_CANCUN", texto: "Ocean Spa Hotel Cancun" },
+          { valor: "LAGUNA_SUITES", texto: "Laguna Suites" },
+        ];
+      }
+
+      // Limpia el select y añade las nuevas opciones
+      var $select = $('select[name="hotel"]'); // Ajusta el selector para apuntar al select deseado
+      $select.empty(); // Vacía el select
+      $select.append($("<option>").val("").text("Seleccione un hotel")); // Añade opción por defecto
+      opcionesActuales.forEach(function (opcion) {
+        $select.append($("<option>").val(opcion.valor).text(opcion.texto));
+      });
+    }
+
+    // Llama a la función al cargar la página
+    actualizarOpcionesSelect();
+  });
+</script>
+
+<style>
+  * {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+      Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue",
+      sans-serif;
+  }
+
+  body {
+    background: black;
+  }
+
+  .input-flotante {
+    background: transparent;
+    position: fixed;
+    width: 95vw;
+    height: auto;
+    left: 50%;
+    bottom: 135px;
+    transform: translate(-50%);
+    margin: auto;
+    transition: bottom 0.5s ease, width 0.5s ease; /* Añade width a la transición */
+    z-index: 999;
+  }
+
+  .input-flotante .mensaje {
+    background: white;
+    width: 140px;
+    padding: 8px;
+    margin-bottom: -1px;
+    font-size: 12px;
+    text-align: center;
+  }
+
+  .input-flotante form {
+    width: 100%;
+    background: white;
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+    align-items: center;
+    justify-content: space-between;
+    padding-left: 5px;
+    padding-right: 5px;
+  }
+
+  .input-flotante form .input {
+    border-right: 1px solid rgba(0, 0, 0, 0.232);
+    padding: 10px;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .input-flotante form button {
+    background: #876530;
+    border: none;
+    outline: none;
+    width: 100%;
+    color: white;
+    height: 100%;
+    padding: 20px 30px;
+    cursor: pointer;
+  }
+
+  .input-flotante form button:hover {
+    background: #75582a;
+  }
+
+  input[type="date"] {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+  }
+
+  .input-flotante input,
+  select {
+    border: none;
+    padding: 15px;
+    width: 100%;
+  }
+
+  .input-flotante form i {
+    font-size: 20px;
+  }
+
+  .input-flotante input:focus,
+  select:focus {
+    border: none;
+    outline: none;
+  }
+</style>
+
+<style>
+  .ui-datepicker .ui-datepicker-header {
+    background: white;
+    border: none;
+  }
+
+  .ui-state-default,
+  .ui-widget-content .ui-state-default,
+  .ui-widget-header .ui-state-default,
+  .ui-button,
+  html .ui-button.ui-state-disabled:hover,
+  html .ui-button.ui-state-disabled:active {
+    border: 1px solid #c5c5c587 !important;
+    font-weight: normal;
+    color: #454545 !important;
+    border-radius: 35px;
+    text-align: center;
+  }
+
+  .ui-datepicker th {
+    font-weight: 200 !important;
+    color: gray !important;
+  }
+
+  .ui-datepicker .ui-datepicker-title {
+    font-weight: 400 !important;
+  }
+
+  .ui-widget-header .ui-icon {
+    filter: contrast(560%);
+  }
+
+  .ui-widget.ui-widget-content {
+    padding: 20px;
+  }
+
+  table tbody > tr:nth-child(odd) > td,
+  table tbody > tr:nth-child(odd) > th,
+  .ui-datepicker td {
+    background: white !important;
+  }
+</style>
