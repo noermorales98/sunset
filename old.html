@@ -12,28 +12,6 @@
 <div class="input-flotante">
   <div class="mensaje">
     <span>Haz una reserva</span>
-    <button id="cerrarInputFlotante" class="custom-button">
-      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-        <g
-          id="SVGRepo_tracerCarrier"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        ></g>
-        <g id="SVGRepo_iconCarrier">
-          <g id="Menu / Close_MD">
-            <path
-              id="Vector"
-              d="M18 18L12 12M12 12L6 6M12 12L18 6M12 12L6 18"
-              stroke="#000000"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            ></path>
-          </g>
-        </g>
-      </svg>
-    </button>
   </div>
   <form class="form">
     <div class="input">
@@ -112,17 +90,13 @@
       </select>
     </div>
     <div class="button">
-      <button id="sendInfo" type="button">Buscar</button>
+      <button id="sendInfo" type="button">Enviar</button>
     </div>
   </form>
 </div>
-<!-- Boton para versión movil -->
-<div class="container-movil">
-  <button class="button-movil">Buscar</button>
-</div>
 
-<!-- jQuery -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 <!-- jQuery UI -->
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script>
@@ -137,28 +111,24 @@
     });
   })(jQuery);
 </script>
-
 <script>
   (function ($) {
     $(document).ready(function () {
-      // Verifica si el dispositivo no es móvil
-      if (!window.matchMedia("(max-width: 768px)").matches) {
-        // Detecta el evento de desplazamiento en la ventana
-        $(window).scroll(function () {
-          // Verifica si la posición de desplazamiento vertical es mayor que un valor específico, por ejemplo, 100
-          if ($(this).scrollTop() > 100) {
-            // Si el usuario se ha desplazado hacia abajo, cambia el bottom a 0
-            $(".input-flotante").css("bottom", "0px");
-            // Ancho a 100vw
-            $(".input-flotante").css("width", "100vw");
-          } else {
-            // Si el usuario está en la parte superior de la página, vuelve a establecer el bottom original
-            $(".input-flotante").css("bottom", "135px");
-            // Ancho vuelve a 95vw
-            $(".input-flotante").css("width", "95vw");
-          }
-        });
-      }
+      // Detecta el evento de desplazamiento en la ventana
+      $(window).scroll(function () {
+        // Verifica si la posición de desplazamiento vertical es mayor que un valor específico, por ejemplo, 100
+        if ($(this).scrollTop() > 100) {
+          // Si el usuario se ha desplazado hacia abajo, cambia el bottom a 0
+          $(".input-flotante").css("bottom", "0px");
+          // Ancho a 100vw
+          $(".input-flotante").css("width", "100vw");
+        } else {
+          // Si el usuario está en la parte superior de la página, vuelve a establecer el bottom original
+          $(".input-flotante").css("bottom", "135px");
+          // Ancho vuelve a 95vw
+          $(".input-flotante").css("width", "95vw");
+        }
+      });
     });
   })(jQuery);
 </script>
@@ -273,32 +243,13 @@
   })(jQuery);
 </script>
 
-<script>
-  // Funcion para hablitar versión movil
-  document.addEventListener("DOMContentLoaded", function () {
-    var buttonMovil = document.querySelector(".button-movil");
-    var inputFlotante = document.querySelector(".input-flotante");
-
-    buttonMovil.addEventListener("click", function () {
-      inputFlotante.classList.add("visible");
-      buttonMovil.style.display = "none";
-    });
-
-    var cerrarInputFlotante = document.getElementById("cerrarInputFlotante");
-
-    cerrarInputFlotante.addEventListener("click", function () {
-      inputFlotante.classList.remove("visible");
-      buttonMovil.style.display = "block";
-    });
-  });
-</script>
-
 <style>
   * {
     font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
       Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue",
       sans-serif;
   }
+
 
   .input-flotante {
     background: transparent;
@@ -309,7 +260,7 @@
     bottom: 135px;
     transform: translate(-50%);
     margin: auto;
-    transition: bottom 0.5s ease, width 0.5s ease; 
+    transition: bottom 0.5s ease, width 0.5s ease; /* Añade width a la transición */
     z-index: 999;
   }
 
@@ -356,6 +307,12 @@
 
   .input-flotante form button:hover {
     background: #75582a;
+  }
+
+  .input-flotante form button:active,
+  .input-flotante form button:focus {
+    background: #000; /* Mantiene el botón negro cuando está activo o enfocado */
+    color: white; /* Asegura que el texto se mantiene blanco */
   }
 
   input[type="date"] {
@@ -422,95 +379,5 @@
   table tbody > tr:nth-child(odd) > th,
   .ui-datepicker td {
     background: white !important;
-  }
-</style>
-
-<style>
-  .container-movil .button-movil {
-    background: #876530;
-    border: none;
-    outline: none;
-    width: 100%;
-    color: white;
-    padding: 20px 30px;
-    cursor: pointer;
-  }
-
-  .container-movil .button-movil:hover {
-    background: #876530 !important;
-  }
-
-  .container-movil {
-    background: white;
-    z-index: 999;
-    padding: 3px;
-    margin: auto;
-    bottom: 0px;
-    position: fixed;
-    left: 0;
-    width: 100%;
-  }
-
-  .mensaje .custom-button {
-    background: none;
-    border: none;
-    outline: none;
-    color: black;
-    cursor: pointer;
-    padding: 0;
-  }
-  .mensaje .custom-button svg {
-    width: 24px;
-    height: 24px;
-  }
-
-  @media (min-width: 768px) {
-    .container-movil {
-      display: none;
-    }
-    .mensaje .custom-button {
-      display: none;
-    }
-  }
-
-  @media (max-width: 768px) {
-    .input-flotante {
-      display: none;
-    }
-
-    .input-flotante.visible {
-      display: block;
-      bottom: 0px;
-      width: 100%;
-    }
-
-    .input-flotante form {
-      flex-direction: column;
-      height: 100%;
-      justify-content: start;
-      margin-bottom: 5px;
-    }
-
-    .input-flotante .mensaje {
-      width: 100%;
-      display: flex;
-      justify-content: space-between;
-    }
-    .mensaje .custom-button {
-      display: block;
-    }
-    .input-flotante form .input {
-      border-right: none;
-    }
-    .mensaje span {
-      font-size: 20px;
-      font-weight: 600;
-    }
-    .button {
-      width: 100%;
-    }
-    #sendInfo{
-      padding: 20px 30px;
-    }
   }
 </style>
