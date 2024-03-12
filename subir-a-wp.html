@@ -129,11 +129,11 @@
   (function ($) {
     // Activación del Datepicker para el input de calendario de entrada
     $("#calendarioEntrada").datepicker({
-      dateFormat: "yy-mm-dd", // Formato de fecha
+      dateFormat: "ddmmyy", // Formato de fecha
     });
     // Activación del Datepicker para el input de calendario de salida
     $("#calendarioSalida").datepicker({
-      dateFormat: "yy-mm-dd", // Formato de fecha
+      dateFormat: "ddmmyy", // Formato de fecha
     });
   })(jQuery);
 </script>
@@ -169,6 +169,7 @@
       // Activación del Datepicker para el input de calendario de entrada y salida
       $("#calendarioEntrada, #calendarioSalida").datepicker({
         dateFormat: "yy-mm-dd", // Formato de fecha
+        minDate: 0
       });
 
       // Manejo del evento click para el botón con ID sendInfo
@@ -200,6 +201,63 @@
       actualizarOpcionesSelect();
     });
   })(jQuery);
+</script>
+
+<script>
+  $(document).ready(function () {
+    // Agrega el Datepicker a tu input
+    $("#calendarioEntrada").datepicker({
+      // Función que se ejecuta cuando se crea el datepicker
+      create: function(event, ui) {
+        aplicarEstilosDiasPasados();
+      }
+    });
+  
+    // Asocia la función aplicarEstilosDiasPasados al evento focus del input
+    $("#calendarioEntrada").on("focus", function () {
+      aplicarEstilosDiasPasados();
+    });
+  });
+</script>
+
+<!-- Script de JavaScript -->
+<script>
+  // Función para aplicar estilos a los días pasados
+  function aplicarEstilosDiasPasados() {
+    // Obtiene la fecha actual
+    var fechaActual = new Date();
+
+    console.log("Aplicando estilos a los días pasados");
+
+    // Selecciona todos los elementos td con datos de día
+    $(".ui-datepicker-calendar td[data-handler='selectDay']").each(function () {
+      // Obtiene el día del elemento
+      var diaElemento = parseInt($(this).find("a").text());
+
+      // Compara con la fecha actual y aplica los estilos si es un día pasado
+      if (diaElemento < fechaActual.getDate()) {
+        $(this).addClass("diasPasados");
+
+        // Aplica estilos CSS para deshabilitar clics
+        $(this).css({
+          cursor: "not-allowed",
+          pointerEvents: "none"
+        });
+      }
+    });
+  }
+
+  // Asocia la función aplicarEstilosDiasPasados al evento click del input #calendarioEntrada
+  $(document).ready(function () {
+    $("#calendarioEntrada").on("click", function () {
+      aplicarEstilosDiasPasados();
+    });
+
+    // Asocia la función aplicarEstilosDiasPasados al evento click del input #calendarioSalida
+    $("#calendarioSalida").on("click", function () {
+      aplicarEstilosDiasPasados();
+    });
+  });
 </script>
 
 <script>
@@ -463,6 +521,12 @@
     width: 24px;
     height: 24px;
   }
+  /* Calendario */
+  .diasPasados a {
+  background-color: #a3a3a3 !important;
+  cursor: not-allowed;
+  pointer-events: none;
+}
 
   @media (min-width: 768px) {
     .container-movil {
@@ -480,8 +544,8 @@
 
     .input-flotante.visible {
       display: block;
-      bottom: 0px;
-      width: 100%;
+      bottom: 0px!important;
+      width: 100%!important;
     }
 
     .input-flotante form {
