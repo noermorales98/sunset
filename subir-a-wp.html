@@ -11,7 +11,7 @@
 />
 <div class="input-flotante">
   <div class="mensaje">
-    <span>Haz una reserva</span>
+    <span>Reservations for Non-Members</span>
     <button id="cerrarInputFlotante" class="custom-button">
       <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
         <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
@@ -53,7 +53,7 @@
         id="calendarioEntrada"
         name="calendarioEntrada"
         type="text"
-        placeholder="Fecha de entrada"
+        placeholder="Check In"
       />
     </div>
     <div class="input">
@@ -63,7 +63,7 @@
         id="calendarioSalida"
         name="calendarioSalida"
         type="text"
-        placeholder="Fecha de salida"
+        placeholder="Check Out"
       />
     </div>
     <div class="input">
@@ -77,7 +77,7 @@
           padding-left: 4px;
           align-items: center;
         "
-        >Adultos<i class="bi bi-person"></i
+        >Adults<i class="bi bi-person"></i
       ></label>
       <!-- Modificado para usar jQuery UI Datepicker -->
       <select id="adultos" name="ninios" style="border: 1px solid #c4c4c4">
@@ -100,10 +100,11 @@
           padding-left: 4px;
           align-items: center;
         "
-        >Niños<i class="bi bi-person"></i
+        >Childrens<i class="bi bi-person"></i
       ></label>
       <!-- Modificado para usar jQuery UI Datepicker -->
       <select id="ninios" name="ninios" style="border: 1px solid #c4c4c4">
+        <option>00</option>
         <option>01</option>
         <option>02</option>
         <option>03</option>
@@ -112,13 +113,13 @@
       </select>
     </div>
     <div class="button">
-      <button id="sendInfo" type="button">Buscar</button>
+      <button id="sendInfo" type="button">Book now</button>
     </div>
   </form>
 </div>
 <!-- Boton para versión movil -->
 <div class="container-movil">
-  <button class="button-movil">Buscar</button>
+  <button class="button-movil">Book now</button>
 </div>
 
 <!-- jQuery -->
@@ -129,11 +130,11 @@
   (function ($) {
     // Activación del Datepicker para el input de calendario de entrada
     $("#calendarioEntrada").datepicker({
-      dateFormat: "ddmmyy", // Formato de fecha
+      dateFormat: "dd-mm-yy", // Formato de fecha
     });
     // Activación del Datepicker para el input de calendario de salida
     $("#calendarioSalida").datepicker({
-      dateFormat: "ddmmyy", // Formato de fecha
+      dateFormat: "dd-mm-yy", // Formato de fecha
     });
   })(jQuery);
 </script>
@@ -165,42 +166,61 @@
 
 <script>
   (function ($) {
-    $(document).ready(function () {
-      // Activación del Datepicker para el input de calendario de entrada y salida
-      $("#calendarioEntrada, #calendarioSalida").datepicker({
-        dateFormat: "yy-mm-dd", // Formato de fecha
-        minDate: 0
-      });
-
-      // Manejo del evento click para el botón con ID sendInfo
-      $("#sendInfo").click(function (event) {
-        event.preventDefault();
-
-        // Construye la URL objetivo basándote en los valores del formulario
-        var url = "https://book.omnibees.com/hotelresults?c=2761&q=5354";
-        url +=
-          "&hotel_folder=" +
-          encodeURIComponent($("select[name='hotel']").val());
-        url += "&CheckIn=" + encodeURIComponent($("#calendarioEntrada").val());
-        url += "&CheckOut=" + encodeURIComponent($("#calendarioSalida").val());
-        url += "&ad=" + encodeURIComponent($("#adultos").val());
-        url += "&ch=" + encodeURIComponent($("#ninios").val());
-
-        // Abre la nueva ventana con la URL construida
-        window.open(url, "_blank");
-      });
-
-      // Función para actualizar las opciones del select según la URL
-      function actualizarOpcionesSelect() {
-        var url = window.location.href; // Obtiene la URL actual
-
-        // Aquí tu lógica para actualizar las opciones del select basada en la URL
-      }
-
-      // Llama a la función al cargar la página
-      actualizarOpcionesSelect();
+  $(document).ready(function () {
+    // Activación del Datepicker para el input de calendario de entrada y salida
+    $("#calendarioEntrada, #calendarioSalida").datepicker({
+      dateFormat: "yy-mm-dd", // Formato de fecha
+      minDate: 0
     });
-  })(jQuery);
+    
+    // Manejo del evento click para el botón con ID sendInfo
+    $("#sendInfo").click(function (event) {
+      event.preventDefault();
+
+      // Construye la URL objetivo basándote en los valores del formulario
+      var url = "https://book.omnibees.com/hotelresults?c=2761&q=5354";
+      url +=
+        "&hotel_folder=" +
+        encodeURIComponent($("select[name='hotel']").val());
+      
+      // Obtiene las fechas en formato yy-mm-dd
+      var checkInDate = $("#calendarioEntrada").datepicker("getDate");
+      var checkOutDate = $("#calendarioSalida").datepicker("getDate");
+
+      // Convierte las fechas al formato ddmmyy
+      var checkInFormatted = formatDate(checkInDate);
+      var checkOutFormatted = formatDate(checkOutDate);
+
+      url += "&CheckIn=" + encodeURIComponent(checkInFormatted);
+      url += "&CheckOut=" + encodeURIComponent(checkOutFormatted);
+      url += "&ad=" + encodeURIComponent($("#adultos").val());
+      url += "&ch=" + encodeURIComponent($("#ninios").val());
+
+      // Abre la nueva ventana con la URL construida
+      window.open(url, "_blank");
+    });
+
+    // Función para actualizar las opciones del select según la URL
+    function actualizarOpcionesSelect() {
+      var url = window.location.href; // Obtiene la URL actual
+
+      // Aquí tu lógica para actualizar las opciones del select basada en la URL
+    }
+
+    // Llama a la función al cargar la página
+    actualizarOpcionesSelect();
+  });
+})(jQuery);
+
+// Función para formatear la fecha en el formato ddmmyy
+function formatDate(date) {
+  var day = date.getDate().toString().padStart(2, '0');
+  var month = (date.getMonth() + 1).toString().padStart(2, '0');
+  var year = date.getFullYear().toString().substr(-2);
+  
+  return day + month + year;
+}
+
 </script>
 
 <script>
@@ -373,7 +393,7 @@
 
   .input-flotante .mensaje {
     background: white;
-    width: 140px;
+    width: 200px;
     padding: 8px;
     margin-bottom: -1px;
     font-size: 12px;
